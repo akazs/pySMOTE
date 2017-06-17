@@ -42,22 +42,15 @@ class SMOTE:
         return samples[idx, :]
 
     def _populate(self, idx, nnarray):
-        N = self.N
-
-        while N > 0:
+        for i in range(self.N):
             nn = np.random.randint(low=0, high=self.k_neighbors)
-            new_entry = np.empty(shape=self.numattrs)
             for attr in range(self.numattrs):
                 dif = (self.samples[nnarray[nn]][attr]
                        - self.samples[idx][attr])
                 gap = np.random.uniform()
                 self.synthetic[self.newidx][attr] = (self.samples[idx][attr]
                                                      + gap * dif)
-            else:
-                self.synthetic = np.concatenate((self.synthetic,
-                                                 [new_entry]))
             self.newidx += 1
-            N -= 1
 
     def oversample(self,samples):
         if type(samples) == list:
