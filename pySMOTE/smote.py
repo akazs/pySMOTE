@@ -27,15 +27,11 @@ class SMOTE:
 
         random_state : int, optional (default=None)
             The random seed of the random number generator.
-
-        merge : bool, optional (default=True)
-            If true, merge the synthetic samples to original samples.
     '''
     def __init__(self,
                  ratio=100,
                  k_neighbors=6,
-                 random_state=None,
-                 merge=True):
+                 random_state=None):
         # check input arguments
         if ratio > 0 and ratio < 100:
             self.ratio = ratio
@@ -80,7 +76,23 @@ class SMOTE:
                                                      + gap * dif)
             self.newidx += 1
 
-    def oversample(self,samples):
+    def oversample(self,samples,merge):
+    '''
+        Perform oversampling using SMOTE
+
+        Parameters
+        ----------
+        samples : list or ndarray, shape (n_samples, n_features)
+            The samples to apply SMOTE to.
+
+        merge : bool, optional (default=True)
+            If true, merge the synthetic samples to original samples.
+
+        Returns
+        -------
+        output : ndarray
+            The output synthetic samples.
+    '''
         if type(samples) == list:
             self.samples = np.array(samples)
         elif type(samples) == np.ndarray:
