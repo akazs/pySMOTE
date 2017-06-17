@@ -51,14 +51,13 @@ class SMOTE:
                 dif = (self.samples[nnarray[nn]][attr]
                        - self.samples[idx][attr])
                 gap = np.random.uniform()
-                new_entry[attr] = sample[idx][attr] + gap * dif
-
-            if not self.synthetic:
-                self.synthetic = np.array([new_entry])
+                self.synthetic[self.newidx][attr] = (self.samples[idx][attr]
+                                                     + gap * dif)
             else:
                 self.synthetic = np.concatenate((self.synthetic,
                                                  [new_entry]))
-            N = N - 1
+            self.newidx += 1
+            N -= 1
 
     def oversample(self,samples):
         if type(samples) == list:
@@ -77,13 +76,15 @@ class SMOTE:
             self.percentage = 100
 
         self.N = int(self.percentage / 100)
+        new_shape = (self.samples.shape[0] * self.N, self.samples.shape[1])
+        self.synthetic = np.empty(shape=new_shape)
+        self.newidx = 0
 
-        self.synthetic = None
         self.nbrs = NearestNeighbors(n_neighbors=self.k_neighbors)
         self.nbrs.fit(samples)
-        self.knn = self.nbrs.kneighbors()
+        self.knn = self.nbrs.kneighbors()[1]
 
-        for idx in self.samples.shape(0):
+        for idx in range(self.samples.shape[0]):
             nnarray = self.knn[idx]
             self._populate(idx, nnarray)
 
