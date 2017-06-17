@@ -1,5 +1,4 @@
-"""
-Python implementation of SMOTE.
+"""Python implementation of SMOTE.
 This implementation is based on the original variant of SMOTE.
 Original paper: https://www.jair.org/media/953/live-953-2037-jair.pdf
 """
@@ -9,8 +8,7 @@ from sklearn.neighbors import NearestNeighbors
 
 
 class SMOTE:
-    """
-        Python implementation of SMOTE.
+    """Python implementation of SMOTE.
 
         This implementation is based on the original variant of SMOTE.
 
@@ -77,8 +75,7 @@ class SMOTE:
             self.newidx += 1
 
     def oversample(self, samples, merge=False):
-        """
-        Perform oversampling using SMOTE
+        """Perform oversampling using SMOTE
 
         Parameters
         ----------
