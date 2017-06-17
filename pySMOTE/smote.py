@@ -58,7 +58,7 @@ class SMOTE:
         if type(random_state) == int:
             np.random.seed(random_state)
 
-    def _randomize(self,samples,ratio):
+    def _randomize(self, samples, ratio):
         length = samples.shape[0]
         target_size = length * ratio
         idx = np.random.randint(length, size=target_size)
@@ -76,7 +76,7 @@ class SMOTE:
                                                      + gap * dif)
             self.newidx += 1
 
-    def oversample(self,samples,merge):
+    def oversample(self, samples, merge=False):
     '''
         Perform oversampling using SMOTE
 
@@ -85,8 +85,8 @@ class SMOTE:
         samples : list or ndarray, shape (n_samples, n_features)
             The samples to apply SMOTE to.
 
-        merge : bool, optional (default=True)
-            If true, merge the synthetic samples to original samples.
+        merge : bool, optional (default=False)
+            If set to true, merge the synthetic samples to original samples.
 
         Returns
         -------
