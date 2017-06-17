@@ -4,7 +4,7 @@ Original paper: https://www.jair.org/media/953/live-953-2037-jair.pdf
 """
 
 import numpy as np
-from sklearn.neighbors import NearistNeighbors
+from sklearn.neighbors import NearestNeighbors
 
 
 class SMOTE:
@@ -48,8 +48,8 @@ class SMOTE:
             nn = np.random.randint(low=0, high=self.k_neighbors)
             new_entry = np.empty(shape=self.numattrs)
             for attr in range(self.numattrs):
-                dif = self.samples[nnarray[nn]][attr]
-                    - self.samples[idx][attr]
+                dif = (self.samples[nnarray[nn]][attr]
+                       - self.samples[idx][attr])
                 gap = np.random.uniform()
                 new_entry[attr] = sample[idx][attr] + gap * dif
 
