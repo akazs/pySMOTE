@@ -1,5 +1,6 @@
 """
 Python implementation of SMOTE.
+This implementation is based on the original variant of SMOTE.
 Original paper: https://www.jair.org/media/953/live-953-2037-jair.pdf
 """
 
@@ -8,21 +9,41 @@ from sklearn.neighbors import NearestNeighbors
 
 
 class SMOTE:
+    '''
+        Python implementation of SMOTE.
+
+        This implementation is based on the original variant of SMOTE.
+
+        Parameters
+        ----------
+        ratio : int, optional (default=100)
+            The ratio percentage of generated samples to original samples.
+
+            - If ratio < 100, then randomly choose ratio% of samples to SMOTE.
+            - If ratio >= 100, it must be a interger multiple of 100.
+
+        k_neighbors : int, optional (defalut=6)
+            Number of nearest neighbors to used to SMOTE.
+
+        random_state : int, optional (default=None)
+            The random seed of the random number generator.
+    '''
     def __init__(self,
-                 percentage=100,
-                 k_neighbors=6):
+                 ratio=100,
+                 k_neighbors=6,
+                 random_state=None):
         # check input arguments
-        if percentage > 0 and percentage < 100:
-            self.percentage = percentage
-        elif percentage >= 100:
-            if percentage % 100 == 0:
-                self.percentage = percentage
+        if ratio > 0 and ratio < 100:
+            self.ratio = ratio
+        elif ratio >= 100:
+            if ratio % 100 == 0:
+                self.ratio = ratio
             else:
                 raise ValueError(
-                    'percentage over 100 should be multiples of 100')
+                    'ratio over 100 should be multiples of 100')
         else:
             raise ValueError(
-                'percentage should be greater than 0')
+                'ratio should be greater than 0')
 
         if type(k_neighbors) == int:
             if k_neighbors > 0:
@@ -33,6 +54,9 @@ class SMOTE:
         else:
             raise TypeError(
                 'Expect integer for k_neighbors')
+
+        if type(random_state) == int:
+            np.random.seed(random_state)
 
     def _randomize(self,samples,ratio):
         length = samples.shape[0]
@@ -63,12 +87,12 @@ class SMOTE:
 
         self.numattrs = samples.shape[1]
 
-        if self.percentage < 100:
-            ratio = percentage / 100.0
+        if self.ratio < 100:
+            ratio = ratio / 100.0
             self.samples = self._randomize(self.samples, ratio) 
-            self.percentage = 100
+            self.ratio = 100
 
-        self.N = int(self.percentage / 100)
+        self.N = int(self.ratio / 100)
         new_shape = (self.samples.shape[0] * self.N, self.samples.shape[1])
         self.synthetic = np.empty(shape=new_shape)
         self.newidx = 0
