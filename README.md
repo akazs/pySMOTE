@@ -21,6 +21,7 @@ pip install .
 ``` python
 import pySMOTE
 
-smote = pySMOTE.SMOTE(ratio=100,k_neighbors=6)
-new_sample_data = smote.oversample(sample_data)
+smote = pySMOTE.SMOTE(ratio=100, k_neighbors=6)
+synthetic_samples = smote.oversample(sample_data)
+new_samples = smote.oversample(sample_data, merge=True)
 ```
