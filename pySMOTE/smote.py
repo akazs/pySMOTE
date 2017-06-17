@@ -27,11 +27,15 @@ class SMOTE:
 
         random_state : int, optional (default=None)
             The random seed of the random number generator.
+
+        merge : bool, optional (default=True)
+            If true, merge the synthetic samples to original samples.
     '''
     def __init__(self,
                  ratio=100,
                  k_neighbors=6,
-                 random_state=None):
+                 random_state=None,
+                 merge=True):
         # check input arguments
         if ratio > 0 and ratio < 100:
             self.ratio = ratio
@@ -105,4 +109,7 @@ class SMOTE:
             nnarray = self.knn[idx]
             self._populate(idx, nnarray)
 
-        return np.concatenate((self.samples, self.synthetic))
+        if merge:
+            return np.concatenate((self.samples, self.synthetic))
+        else:
+            return self.synthetic
