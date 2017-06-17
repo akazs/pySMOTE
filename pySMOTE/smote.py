@@ -4,6 +4,7 @@ Original paper: https://www.jair.org/media/953/live-953-2037-jair.pdf
 """
 
 import numpy as np
+from sklearn.neighbors import NearistNeighbors
 
 
 class SMOTE:
@@ -32,3 +33,58 @@ class SMOTE:
         else:
             raise TypeError(
                 'Expect integer for k_neighbors')
+
+    def _randomize(self,samples,ratio):
+        length = samples.shape[0]
+        target_size = length * ratio
+        idx = np.random.randint(length, size=target_size)
+
+        return samples[idx, :]
+
+    def _populate(self, idx, nnarray):
+        N = self.N
+
+        while N > 0:
+            nn = np.random.randint(low=0, high=self.k_neighbors)
+            new_entry = np.empty(shape=self.numattrs)
+            for attr in range(self.numattrs):
+                dif = self.samples[nnarray[nn]][attr]
+                    - self.samples[idx][attr]
+                gap = np.random.uniform()
+                new_entry[attr] = sample[idx][attr] + gap * dif
+
+            if not self.synthetic:
+                self.synthetic = np.array([new_entry])
+            else:
+                self.synthetic = np.concatenate((self.synthetic,
+                                                 [new_entry]))
+            N = N - 1
+
+    def oversample(self,samples):
+        if type(samples) == list:
+            self.samples = np.array(samples)
+        elif type(samples) == np.ndarray:
+            self.samples = samples
+        else:
+            raise TypeError(
+                'Expect a built-in list or an ndarray for samples')
+
+        self.numattrs = samples.shape[1]
+
+        if self.percentage < 100:
+            ratio = percentage / 100.0
+            self.samples = self._randomize(self.samples, ratio) 
+            self.percentage = 100
+
+        self.N = int(self.percentage / 100)
+
+        self.synthetic = None
+        self.nbrs = NearestNeighbors(n_neighbors=self.k_neighbors)
+        self.nbrs.fit(samples)
+        self.knn = self.nbrs.kneighbors()
+
+        for idx in self.samples.shape(0):
+            nnarray = self.knn[idx]
+            self._populate(idx, nnarray)
+
+        return np.concatenate((self.samples, self.synthetic))
