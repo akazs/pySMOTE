@@ -1,15 +1,15 @@
-'''
+"""
 Python implementation of SMOTE.
 This implementation is based on the original variant of SMOTE.
 Original paper: https://www.jair.org/media/953/live-953-2037-jair.pdf
-'''
+"""
 
 import numpy as np
 from sklearn.neighbors import NearestNeighbors
 
 
 class SMOTE:
-    '''
+    """
         Python implementation of SMOTE.
 
         This implementation is based on the original variant of SMOTE.
@@ -27,7 +27,7 @@ class SMOTE:
 
         random_state : int, optional (default=None)
             The random seed of the random number generator.
-    '''
+    """
     def __init__(self,
                  ratio=100,
                  k_neighbors=6,
@@ -77,7 +77,7 @@ class SMOTE:
             self.newidx += 1
 
     def oversample(self, samples, merge=False):
-        '''
+        """
         Perform oversampling using SMOTE
 
         Parameters
@@ -92,7 +92,7 @@ class SMOTE:
         -------
         output : ndarray
             The output synthetic samples.
-        '''
+        """
         if type(samples) == list:
             self.samples = np.array(samples)
         elif type(samples) == np.ndarray:
