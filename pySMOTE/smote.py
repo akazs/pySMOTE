@@ -98,7 +98,7 @@ class SMOTE:
             raise TypeError(
                 'Expect a built-in list or an ndarray for samples')
 
-        self.numattrs = samples.shape[1]
+        self.numattrs = self.samples.shape[1]
 
         if self.ratio < 100:
             ratio = ratio / 100.0
